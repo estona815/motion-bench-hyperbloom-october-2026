@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A local browser tool for comparing two CSS easing curves at the same time and distance.">
+  <title>Motion Bench — compare the feel</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="masthead"><a href="#main" class="wordmark">Motion Bench<span class="brand-dot" aria-hidden="true"></span></a><button type="button" id="reset">Reset comparison</button></header>
+<main id="main">
+  <div class="intro"><div><h1>Same moment.<br>Different feel.</h1><p>Compare two easing curves with the same distance and duration.<br class="desktop-break"> Pause anywhere to see exactly what changes.</p></div><p class="local-note">Runs in your browser.<br>No account or uploads.</p></div>
+  <section class="bench" aria-label="Easing comparison workbench">
+    <div class="editor">
+      <div class="section-title"><h2>Edit the curve</h2><div class="curve-tabs" role="group" aria-label="Curve to edit"><button type="button" id="choose-a" aria-pressed="true">A</button><button type="button" id="choose-b" aria-pressed="false">B</button></div></div>
+      <svg id="graph" viewBox="0 0 400 272" role="img" aria-label="Two easing curves: horizontal input time and vertical output progress">
+        <g class="graph-grid"><path d="M40 16V256 M120 16V256 M200 16V256 M280 16V256 M360 16V256 M40 16H360 M40 96H360 M40 176H360 M40 256H360"/></g>
+        <path class="reference" d="M40 176L360 96"/>
+        <g class="axis-labels"><text x="12" y="20">2</text><text x="12" y="100">1</text><text x="12" y="180">0</text><text x="8" y="260">−1</text><text x="38" y="269">0</text><text x="354" y="269">1</text></g>
+        <path id="curve-a" class="curve a"/><path id="curve-b" class="curve b"/>
+        <path id="handles" class="handles"/><circle id="handle-1" class="handle" r="5"/><circle id="handle-2" class="handle" r="5"/>
+        <path id="time-line" class="time-line"/><circle id="point-a" class="sample-point a" r="6"/><circle id="point-b" class="sample-point b" r="6"/>
+      </svg>
+      <p class="graph-caption">Horizontal: elapsed time · Vertical: movement progress</p>
+      <div class="preset-row"><label for="preset">Starting curve</label><select id="preset"><option value="custom">Custom</option><option value="linear">Linear</option><option value="ease">Ease</option><option value="ease-in">Ease in</option><option value="ease-out" selected>Ease out</option><option value="ease-in-out">Ease in out</option><option value="back">Back / overshoot</option></select></div>
+      <fieldset class="coordinates"><legend id="coordinate-legend">Curve A control points</legend><label>X1 <input id="x1" type="number" min="0" max="1" step="any" value="0"></label><label>Y1 <input id="y1" type="number" min="-1" max="2" step="any" value="0"></label><label>X2 <input id="x2" type="number" min="0" max="1" step="any" value="0.58"></label><label>Y2 <input id="y2" type="number" min="-1" max="2" step="any" value="1"></label></fieldset>
+      <p class="field-hint">X: 0–1. Y: −1–2; values outside 0–1 allow overshoot.</p>
+      <p id="validation" class="validation" role="alert"></p>
+    </div>
+    <div class="preview">
+      <div class="section-title"><h2>Compare the motion</h2><label class="duration" for="duration">Duration <select id="duration"><option value="300">300 ms</option><option value="600">600 ms</option><option value="1000" selected>1,000 ms</option><option value="2000">2,000 ms</option></select></label></div>
+      <div class="lane"><div class="lane-heading"><h3><span class="curve-letter a-label">A</span><span id="name-a">Ease out</span></h3><output id="result-a">0% movement</output></div><div class="track" aria-hidden="true"><span class="track-start"></span><span class="track-end"></span><div class="runner a-runner" id="runner-a"></div></div><code id="code-a"></code></div>
+      <div class="lane"><div class="lane-heading"><h3><span class="curve-letter b-label">B</span><span id="name-b">Ease in out</span></h3><output id="result-b">0% movement</output></div><div class="track" aria-hidden="true"><span class="track-start"></span><span class="track-end"></span><div class="runner b-runner" id="runner-b"></div></div><code id="code-b"></code></div>
+      <div class="playback"><button type="button" class="primary" id="play">Play comparison</button><button type="button" id="start">Back to start</button><output id="time-label">0% elapsed</output></div>
+      <label class="scrub-label" for="scrub">Inspect a moment</label><input type="range" id="scrub" min="0" max="1000" value="0" step="1">
+      <div class="scrub-ticks" aria-hidden="true"><span>Start</span><span>Halfway</span><span>Finish</span></div>
+      <label class="reduce"><input type="checkbox" id="reduce">Static comparison — stop playback</label>
+      <p id="motion-note" class="motion-note">Playback starts only when you choose Play. You can inspect every moment without animation.</p>
+    </div>
+  </section>
+  <section class="export-section" aria-labelledby="export-heading"><div><h2 id="export-heading">Take the comparison into your work.</h2><p>Exact CSS for both curves, with a reduced-motion alternative.<br>Apply the classes to your own elements and choose a transform.</p><button type="button" id="export">Download CSS</button></div><label class="css-label" for="css-output">CSS output<textarea id="css-output" readonly spellcheck="false" rows="12"></textarea></label></section>
+  <p id="status" class="status" role="status" aria-live="polite"></p>
+</main>
+<footer><p>A design tool, not a measured usability study. Visual samples use translation only.</p><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/easing-function/cubic-bezier" target="_blank" rel="noreferrer">About CSS easing</a></footer>
+<script type="module" src="app.mjs"></script>
+</body>
+</html>
